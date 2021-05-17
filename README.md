@@ -13,7 +13,7 @@ command = Command(regex, coro)
 그리고, `discord.Client` 객체와 등록할 `Command` 객체들이 담긴 집합 (set) 을  넘겨 `CommandWrapper` 객체를 만듭니다.
 
 ```py
-cw = CommandWrapper(bot, set([command]))
+cw = CommandWrapper(client, set([command]))
 ```
 
 또는 `CommandWrapper` 객체를 생성한 후에 `register_command` 메소드를 호출하여 명령어를 등록할 수 있습니다.
@@ -30,3 +30,12 @@ command = Command('^!comm (?P<word>\s+)', coro)
 ```
 
 와 같이 할 수 있습니다.
+
+그리고, 따로 `on_message` 이벤트를 처리해야 할 경우에는 이벤트 함수의 맨 끝에 `CommandWrapper.process_commands` 메소드를 호출하여 주면 됩니다.
+
+```py
+@client.event
+async def on_message(message):
+    # 이것저것 한 뒤...
+    await cw.process_commands(message)
+```
